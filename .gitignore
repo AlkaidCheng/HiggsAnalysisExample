@@ -30,6 +30,7 @@ LoopAllDict.cc
 dict.cpp
 *.json
 *.pevents
+*.xml
 
 #CVS
 CVS
