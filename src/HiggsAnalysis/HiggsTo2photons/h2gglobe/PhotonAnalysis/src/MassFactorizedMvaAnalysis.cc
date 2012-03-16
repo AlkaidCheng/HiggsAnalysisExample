@@ -953,10 +953,30 @@ void MassFactorizedMvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             l.FillHist("r9_2",0,sublead_r9,evweight);
             l.FillHist("E1",0,lead_p4.E(),evweight);
             l.FillHist("E2",0,sublead_p4.E(),evweight);
+      float rhofac=0.17;
+      float pt_lead    = lead_p4.Pt();
+      float pt_sublead = sublead_p4.Pt();
+
+      l.FillHist("hoe_1",0,l.pho_hoe[diphoton_index.first] ,evweight); 
+      l.FillHist("sieie_1",0,l.pho_sieie[diphoton_index.first],evweight); 
+      l.FillHist("ecaliso_1",0,l.pho_ecalsumetconedr03[diphoton_index.first]-0.012*pt_lead,evweight);
+      l.FillHist("hcaliso_1",0,l.pho_hcalsumetconedr03[diphoton_index.first]-0.005*pt_lead,evweight); 
+      l.FillHist("trkiso_1",0,l.pho_trksumpthollowconedr03[diphoton_index.first]-0.002*pt_lead,evweight); 
+      l.FillHist("hcalecal_1",0,l.pho_ecalsumetconedr03[diphoton_index.first]+l.pho_hcalsumetconedr03[diphoton_index.first]-l.rho*rhofac,evweight);
+      l.FillHist("abstrkiso_1",0,l.SumTrackPtInCone(&lead_p4, l.dipho_vtxind[diphoton_id], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight);
+      l.FillHist("trkiso_hollow03_1",0,l.pho_trksumpthollowconedr03[diphoton_index.first],evweight);
+
+      l.FillHist("hoe_2",0,l.pho_hoe[diphoton_index.second] ,evweight); 
+      l.FillHist("sieie_2",0,l.pho_sieie[diphoton_index.second],evweight); 
+      l.FillHist("ecaliso_2",0,l.pho_ecalsumetconedr03[diphoton_index.second]-0.012*pt_sublead,evweight);
+      l.FillHist("hcaliso_2",0,l.pho_hcalsumetconedr03[diphoton_index.second]-0.005*pt_sublead,evweight); 
+      l.FillHist("trkiso_2",0,l.pho_trksumpthollowconedr03[diphoton_index.second]-0.002*pt_sublead,evweight); 
+      l.FillHist("hcalecal_2",0,l.pho_ecalsumetconedr03[diphoton_index.second]+l.pho_hcalsumetconedr03[diphoton_index.second]-l.rho*rhofac,evweight);
+      l.FillHist("abstrkiso_2",0,l.SumTrackPtInCone(&lead_p4, l.dipho_vtxind[diphoton_id], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight);
+      l.FillHist("trkiso_hollow03_2",0,l.pho_trksumpthollowconedr03[diphoton_index.second] ,evweight); 
           }
         } 
         else if (catCiC==0) {
-          eventListText <<  " Run=" << l.run << "  LS=" << l.lumis << "  Event=" << l.event << " BDTCAT=" << category << " ggM=" << mass << " gg_Pt=" << ptHiggs << " LeadPhotonPhoid=" << phoid_mvaout_lead << " SubleadPhotonPhoid=" <<phoid_mvaout_sublead << " diphotonBDT=" << diphobdt_output << " photon1Eta=" << lead_p4.Eta() <<" photon2Eta="<<sublead_p4.Eta() << " sigmaMrv="<<sigmaMrv << " sigmaMwv=" << sigmaMwv << " photon1Pt="<<lead_p4.Pt()<<" photon2Pt="<<sublead_p4.Pt() << " vtxProb="<<vtxProb <<" cosDphi="<<TMath::Cos(lead_p4.Phi() - sublead_p4.Phi()) << " r9_1=" <<lead_r9 <<" r9_2=" <<sublead_r9  <<" E1="<<lead_p4.E()<<" E2="<<sublead_p4.E() << endl;
           l.FillHist("ggM",1,mass,evweight);
           l.FillHist("gg_Pt",1,ptHiggs,evweight);
           l.FillHist("LeadPhotonPhoid",1,phoid_mvaout_lead,evweight);
@@ -978,7 +998,34 @@ void MassFactorizedMvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
       }
     } 
     else if (catCiC==0) {
-      eventListText <<  " Run=" << l.run << "  LS=" << l.lumis << "  Event=" << l.event << endl;
+      float rhofac=0.17;
+      float pt_lead    = lead_p4_cic.Pt();
+      float pt_sublead = sublead_p4_cic.Pt();
+
+      float hcalecal_1 = l.pho_ecalsumetconedr03[diphoton_index_cic.first] +l.pho_hcalsumetconedr03[diphoton_index_cic.first]-l.rho*rhofac;
+      float hcalecal_2 = l.pho_ecalsumetconedr03[diphoton_index_cic.second]+l.pho_hcalsumetconedr03[diphoton_index_cic.second]-l.rho*rhofac;
+
+
+      float trkiso_hollow_1 = l.pho_trksumpthollowconedr03[diphoton_index_cic.first];
+      float trkiso_hollow_2 = l.pho_trksumpthollowconedr03[diphoton_index_cic.second];
+
+      l.FillHist("hoe_1",2,l.pho_hoe[diphoton_index_cic.first] ,evweight_cic); 
+      l.FillHist("sieie_1",2,l.pho_sieie[diphoton_index_cic.first],evweight_cic); 
+      l.FillHist("ecaliso_1",2,l.pho_ecalsumetconedr03[diphoton_index_cic.first]-0.012*pt_lead,evweight_cic);
+      l.FillHist("hcaliso_1",2,l.pho_hcalsumetconedr03[diphoton_index_cic.first]-0.005*pt_lead,evweight_cic); 
+      l.FillHist("trkiso_1",2,l.pho_trksumpthollowconedr03[diphoton_index_cic.first]-0.002*pt_lead,evweight_cic); 
+      l.FillHist("hcalecal_1",2,hcalecal_1,evweight_cic);
+      l.FillHist("abstrkiso_1",2,l.SumTrackPtInCone(&lead_p4_cic, l.dipho_vtxind[diphoton_id_cic], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight_cic);
+      l.FillHist("trkiso_hollow03_1",2,trkiso_hollow_1,evweight_cic);
+
+      l.FillHist("hoe_2",2,l.pho_hoe[diphoton_index_cic.second] ,evweight_cic); 
+      l.FillHist("sieie_2",2,l.pho_sieie[diphoton_index_cic.second],evweight_cic); 
+      l.FillHist("ecaliso_2",2,l.pho_ecalsumetconedr03[diphoton_index_cic.second]-0.012*pt_sublead,evweight_cic);
+      l.FillHist("hcaliso_2",2,l.pho_hcalsumetconedr03[diphoton_index_cic.second]-0.005*pt_sublead,evweight_cic); 
+      l.FillHist("trkiso_2",2,l.pho_trksumpthollowconedr03[diphoton_index_cic.second]-0.002*pt_sublead,evweight_cic); 
+      l.FillHist("hcalecal_2",2,hcalecal_2,evweight_cic);
+      l.FillHist("abstrkiso_2",2,l.SumTrackPtInCone(&lead_p4_cic, l.dipho_vtxind[diphoton_id_cic], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight_cic);
+      l.FillHist("trkiso_hollow03_2",2,trkiso_hollow_2,evweight_cic);
 
       l.FillHist("ggM",2,Higgs_cic.M(),evweight_cic);
       l.FillHist("gg_Pt",2,Higgs_cic.Pt(),evweight_cic);
@@ -1013,6 +1060,24 @@ void MassFactorizedMvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
       l.FillHist("E1",2,lead_p4_cic.E(),evweight_cic);
       l.FillHist("E2",2,sublead_p4_cic.E(),evweight_cic);
+
+
+      eventListText << "spurious event: ";
+      if (hcalecal_1 > 3.){
+        eventListText << "FAIL:HCALECAL_1 ";
+      }
+      if (hcalecal_2 > 3.){
+        eventListText << "FAIL:HCALECAL_2 ";
+      }
+      if (trkiso_hollow_1 > 4.){
+        eventListText << "FAIL:TRKISOHOLLOW_1 ";
+      }
+      if (trkiso_hollow_2 > 4.){
+        eventListText << "FAIL:TRKISOHOLLOW_2 ";
+      }
+
+      eventListText << "END" << endl;
+
     }
 
     l.FillHist2D("passCiC_vs_passMVA",0, float(passMVA), float(passCiC), 1.);

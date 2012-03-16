@@ -18,3 +18,21 @@ htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=1.0    ymin=0 ymax=
 htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=100.0  ymin=0 ymax=0 name=E1
 htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=100.0  ymin=0 ymax=0 name=E2
 
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=0.1  ymin=0 ymax=0 name=hoe_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=0.1  ymin=0 ymax=0 name=sieie_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=ecaliso_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=hcaliso_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=trkiso_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=hcalecal_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=abstrkiso_1
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=trkiso_hollow03_1
+
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=0.1  ymin=0 ymax=0 name=hoe_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=0.1  ymin=0 ymax=0 name=sieie_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=ecaliso_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=hcaliso_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=trkiso_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=hcalecal_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=abstrkiso_2
+htyp=0 plot=-1  ncat=4  xbins=100   ybins=0  xmin=-0.0  xmax=10.0  ymin=0 ymax=0 name=trkiso_hollow03_2
+
