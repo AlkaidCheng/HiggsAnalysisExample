@@ -19,26 +19,34 @@ parser.add_option("","--atCERN",action="store_true",default=False,help="need to 
   
 interpFileName = options.fileName+"_interpolated.root"
 #-------------------------------------------------------------------------
-"""
-if options.atCERN :os.system("source setupROOT.csh")
-else:os.system("source setupROOT.sh")
-ROOT.gROOT.ProcessLine(".L createCorrectedBackgroundModel.C+g")
-ROOT.gROOT.ProcessLine(".L BDTInterpolation.C+g")
 
-from ROOT import createCorrectedBackgroundModel
-from ROOT import BDTInterpolation
+if not options.htmlOnly:
+  """
+  # Make necessary folders to make plots.
+  os.system("mkdir mva-datacards-grad")
+  os.system("mkdir mva-datacards-ada")
+  os.system("mkdir mva-plots-grad")
+  os.system("mkdir mva-plots-ada")
+  os.system("mkdir BMplots")
+  os.system("mkdir plots") 
+  """
+  if options.atCERN :os.system("source setupROOT.csh")
+  else:os.system("source setupROOT.sh")
+  ROOT.gROOT.ProcessLine(".L createCorrectedBackgroundModel.C+g")
+  ROOT.gROOT.ProcessLine(".L BDTInterpolation.C+g")
 
-"""
+  from ROOT import createCorrectedBackgroundModel
+  from ROOT import BDTInterpolation
+
 
 ROOT.gROOT.SetStyle("Plain")
 ROOT.gROOT.SetBatch()
 ROOT.gStyle.SetOptStat(0)
 
 nSidebands=6
-datacardFile="mva-datacards"
-mvaPlotFile="mva-plots"
+#datacardFile="mva-datacards"
+#mvaPlotFile="mva-plots"
 
-"""
 if not options.htmlOnly:
   if not options.sigInterpOnly and not options.datacardsOnly:
     # First correct background model
@@ -46,6 +54,7 @@ if not options.htmlOnly:
     print '   Corrected Background Model '
     print '----------------------------------------------------------'
     createCorrectedBackgroundModel(options.fileName,nSidebands,options.diagnostics)
+  os.system("cmsenv")
 
   if not options.backgroundOnly and not options.datacardsOnly:
     # Second interpolate intermediate signal distributions
@@ -54,8 +63,7 @@ if not options.htmlOnly:
     print '----------------------------------------------------------'
     BDTInterpolation(options.fileName,options.diagnostics,True,True)
 
-  os.system("cmsenv")
-"""
+
 if not options.backgroundOnly and not options.sigInterpOnly:
     # Third write datacards
     print '----------------------------------------------------------'
@@ -90,5 +98,5 @@ if options.www or options.htmlOnly:
   os.system("cp -r BMplots "+outputLocation)
   os.system("ln -s "+outputLocation+" ~/public_html/"+options.outputDir+"/Latest")
   print "Plots available to view in ~/public_html/"+options.outputDir+"/Latest/"
-  print "If working on /vols/ at IC plots can be view at: \n \t \t \t www.hep.ph.ic.ac.uk/~"+user+"/"+options.outputDir+"/Latest/plots/plots.html"
+  print "If working on /vols/ at IC plots can be view at: \n \t \t \t www.hep.ph.ic.ac.uk/~"+user+"/"+options.outputDir+"/Latest/BMplots/grad/fCorr.html"
 
