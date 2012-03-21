@@ -138,37 +138,22 @@ protected:
 	std::map<int,std::string> signalLabels;
 
 	//MVA variables
-	float _log_H_pt;     
-	float _H_ptOverM;     
-	float _H_eta;        
-	float _d_phi;        
+	float _mgg;          
+	int _cat;           
+	float _H_pt;         
+	float _bdtoutput;
 	float _cos_d_phi;        
-	float _max_eta;      
-	float _min_r9;       
 	float _pho1_eta;    
 	float _pho2_eta;     
+	float _pho1_mva;     
+	float _pho2_mva;     
 	float _pho1_ptOverM; 
 	float _pho2_ptOverM; 
+	float _vtx_prob;           
 	float _sigmaMOverM;
 	float _sigmaMOverM_wrongVtx;
-	float _deltaMOverSigmaM;
   float _deltaMOverM; 
-	float _mgg;          
-	float _pho1_phi;     
-	float _pho1_pt;      
-	float _pho1_r9;      
-	float _pho2_phi;     
-	float _pho2_pt;      
-	float _pho2_r9;      
-	float _H_pt;         
-	float _Ht;           
-	float _d_eta;        
-	float _mod_d_eta;    
-	float _cos_theta_star;
-	float _vtx_prob;           
 	float _wt;           
-	float _bdtoutput;
-	int _cat;           
 	int _sideband;           
 
 	//vector<double> weights;
