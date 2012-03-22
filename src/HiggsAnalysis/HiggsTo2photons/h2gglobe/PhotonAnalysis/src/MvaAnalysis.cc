@@ -1294,7 +1294,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
     float bdtoutput,phoid_mvaout_lead,phoid_mvaout_sublead;
     if (bdtTrainingPhilosophy=="MIT"){
       bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
-      if (bdtoutput < 0.05) category = -1;
+      //if (bdtoutput < 0.05) category = -1;
       phoid_mvaout_lead = l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,"MIT");
       phoid_mvaout_sublead = l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,"MIT");
     } 
@@ -1448,6 +1448,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
           bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
           bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
           if (bdtoutput>=0.05) {
             //l.FillHist("signal_pt_msig",0, Higgs.Pt(), evweight);
@@ -1575,6 +1576,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
               bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
               bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
               if (mass_hypothesis == masses[i]) {
 
@@ -1663,6 +1665,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
                   SetBDTInputVariables(&lead_p4,&sublead_p4,lead_r9,sublead_r9,massResolutionCalculator,vtx_mva,mass_hypothesis_low,bdtoutput,evweight);
                   bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
                   bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
                   if (mass_hypothesis == masses[i]) {
 
@@ -1749,6 +1752,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
                   SetBDTInputVariables(&lead_p4,&sublead_p4,lead_r9,sublead_r9,massResolutionCalculator,vtx_mva,mass_hypothesis_high,bdtoutput,evweight);
                   bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
                   bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
                   if (mass_hypothesis == masses[i]) {
 
@@ -1999,7 +2003,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           float bdtoutput;
           if (bdtTrainingPhilosophy=="MIT"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
-            if (bdtoutput < 0.05 ) category = -1;
+            //if (bdtoutput < 0.05 ) category = -1;
           } 
           else if (bdtTrainingPhilosophy=="UCSD"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"UCSD");
@@ -2017,6 +2021,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,lead_r9,sublead_r9,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
@@ -2097,7 +2102,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           float bdtoutput;
           if (bdtTrainingPhilosophy=="MIT"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT",photon_idMVA1,photon_idMVA2);
-            if (bdtoutput < 0.05) category = -1;
+            //if (bdtoutput < 0.05) category = -1;
           } 
           else if (bdtTrainingPhilosophy=="UCSD"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"UCSD");
@@ -2115,6 +2120,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,lead_r9,sublead_r9,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
@@ -2320,7 +2326,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           float bdtoutput;
           if (bdtTrainingPhilosophy=="MIT"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
-            if (bdtoutput < 0.05) category = -1;  // Remove the VBF tagged events
+            //if (bdtoutput < 0.05) category = -1;  // Remove the VBF tagged events
           } 
           else if (bdtTrainingPhilosophy=="UCSD"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"UCSD");
@@ -2338,6 +2344,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,lead_r9,sublead_r9,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
+          if (bdt_grad < 0.05) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
