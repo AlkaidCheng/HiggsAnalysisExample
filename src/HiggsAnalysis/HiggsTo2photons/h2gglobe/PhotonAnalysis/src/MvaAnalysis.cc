@@ -798,7 +798,16 @@ void MvaAnalysis::Init(LoopAll& l)
     //Set up TMVA reader (only two variables)
     tmvaReader_= new TMVA::Reader();
 
-    tmvaReader_->AddVariable("bdtoutput",&_bdtoutput);
+    tmvaReader_->AddVariable( "cos_d_phi", &_cos_d_phi);
+    tmvaReader_->AddVariable( "pho1_eta", &_pho1_eta );
+    tmvaReader_->AddVariable( "pho2_eta", &_pho2_eta );
+    tmvaReader_->AddVariable( "pho1_ptOverM",  &_pho1_ptOverM );
+    tmvaReader_->AddVariable( "pho2_ptOverM",  &_pho2_ptOverM );
+    tmvaReader_->AddVariable( "pho1_mva", &_pho1_mva );
+    tmvaReader_->AddVariable( "pho2_mva", &_pho2_mva );
+    tmvaReader_->AddVariable( "sigmaMOverM", &_sigmaMOverM );
+    tmvaReader_->AddVariable( "sigmaMOverM_wrongVtx", &_sigmaMOverM_wrongVtx );
+    tmvaReader_->AddVariable( "vtx_prob", &_vtx_prob );
     tmvaReader_->AddVariable("deltaMOverM", &_deltaMOverM);
 
     //Invariant Mass Spectra
@@ -941,8 +950,8 @@ void MvaAnalysis::Init(LoopAll& l)
     }
     else {
       if (bdtTrainingPhilosophy=="MIT") {
-        tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"/TMVAClassification_BDTadaMIT.weights.xml");
-        tmvaReader_->BookMVA("BDT_grad_123",mvaWeightsFolder+"/TMVAClassification_BDTgradMIT.weights.xml");
+        tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"TMVAClassification_BDTG.weights.xml");
+        tmvaReader_->BookMVA("BDT_grad_123", mvaWeightsFolder+"TMVAClassification_BDT.weights.xml");
       }
       else {
         tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"/TMVAClassification_BDTadaUCSD.weights.xml");
@@ -1789,25 +1798,25 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
                   }
 
-                  if (cur_type == 0 ){//data
-		    if (VBFevent){
+                  if (cur_type == 0){//data
+                    if (VBFevent){
                       l.rooContainer->InputBinnedDataPoint(Form("data_%dhigh_VBF_%3.1f",sideband_i,mass_hypothesis),category,1.+sidebandWidth+_deltaMOverM,evweight);
-		    } else {
+                    } else {
                       l.rooContainer->InputBinnedDataPoint(Form("data_%dhigh_BDT_ada_%3.1f",sideband_i,mass_hypothesis),category,bdt_ada,evweight);
                       l.rooContainer->InputBinnedDataPoint(Form("data_%dhigh_BDT_grad_%3.1f",sideband_i,mass_hypothesis) ,category,bdt_grad,evweight);
-		    }
+                    }
                   }
-                  else if (cur_type > 0 ){// background MC
+                  else if (cur_type > 0){// background MC
                     if (cur_type==6){
                       //l.rooContainer->InputBinnedDataPoint(Form("zee_%dhigh_BDT_ada_%3.1f",sideband_i,mass_hypothesis),category,bdt_ada,evweight);
                       //l.rooContainer->InputBinnedDataPoint(Form("zee_%dhigh_BDT_grad_%3.1f",sideband_i,mass_hypothesis) ,category,bdt_grad,evweight);
                     } else {
-		      if (VBFevent){
+                      if (VBFevent){
                         l.rooContainer->InputBinnedDataPoint(Form("bkg_%dhigh_VBF_%3.1f",sideband_i,mass_hypothesis),category,1.+sidebandWidth+_deltaMOverM,evweight);
-		      } else {
+                      } else {
                         l.rooContainer->InputBinnedDataPoint(Form("bkg_%dhigh_BDT_ada_%3.1f",sideband_i,mass_hypothesis),category,bdt_ada,evweight);
                         l.rooContainer->InputBinnedDataPoint(Form("bkg_%dhigh_BDT_grad_%3.1f",sideband_i,mass_hypothesis),category,bdt_grad,evweight);
-		      }
+                      }
                     }
                   }
                 }

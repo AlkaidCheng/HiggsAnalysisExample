@@ -1,11 +1,10 @@
 intL=4763. histfile=CMS-HGG_newrebinning.root output=shifo.root
 
-Fil=../Macros/CMS-HGG_vbf_dmom.root
+Dir=full_bdt
 ->
-Dir=vbf_dmom_comb
 Dir=cms-hgg_icvbf_fixtrkiso
 Dir=cms-hgg_icvbf_fixtrkiso_merged
-->
+
 ->
 Branches to use
 ->

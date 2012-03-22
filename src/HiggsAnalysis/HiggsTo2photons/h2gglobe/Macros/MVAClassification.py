@@ -15,7 +15,7 @@ import getopt # command line parser
 
 # Default settings for command line arguments
 DEFAULT_OUTFNAME = "TMVA"
-DEFAULT_INFNAME  = "TMVA_input_CMS-HGG_4686pb.root"
+DEFAULT_INFNAME  = "TMVA_input_training.root"
 DEFAULT_TREESIG  = "sig"
 DEFAULT_TREEBKG  = "bkg"
 DEFAULT_METHODS  = "BDT"
@@ -144,25 +144,19 @@ def main():
     factory.SetVerbose( verbose )
     
     # Define the input variables that shall be used for the classifier training
-    factory.AddVariable( "pho1_ptOverM", "P_{T}^{lead} / M_{H}", "", 'F' );
-    factory.AddVariable( "pho2_ptOverM", "P_{T}^{sublead} / M_{H}", "", 'F' );
+
+    factory.AddVariable( "cos_d_phi","Cos #Delta #phi", "", 'F' );
     factory.AddVariable( "pho1_eta","#eta^{lead}", "", 'F' );
     factory.AddVariable( "pho2_eta","#eta^{sublead}", "", 'F' );
-    factory.AddVariable( "d_phi","#Delta #phi", "rad", 'F' );#should this be cos delta Phi
-    factory.AddVariable( "H_ptOverM","P_{T}^{Higgs}/M_{H}", "", 'F' );
-    factory.AddVariable( "H_eta","#eta^{Higgs}", "", 'F' );
+    factory.AddVariable( "pho1_ptOverM", "P_{T}^{lead} / M_{H}", "", 'F' );
+    factory.AddVariable( "pho2_ptOverM", "P_{T}^{sublead} / M_{H}", "", 'F' );
+    factory.AddVariable( "pho1_mva","PhoID_{mva}^{lead}", "", 'F' );
+    factory.AddVariable( "pho2_mva","PhoID_{mva}^{sublead}", "", 'F' );
+    factory.AddVariable( "sigmaMOverM","#sigmaM_{correct} / M",  'F' );
+    factory.AddVariable( "sigmaMOverM_wrongVtx","#sigmaM_{wrong} / M",  'F' );
+    factory.AddVariable( "vtx_prob","P^{vtx}",  'F' );
+    factory.AddVariable( "deltaMOverM","#DeltaM / M_{Hypth}.",  'F' );
 
-    factory.AddVariable( "sigmaMOverM","#sigmaM_{cor} / M",  'F' )
-    factory.AddVariable( "sigmaMOverM_wrongVtx","#sigmaM_{wrong} / M",  'F' )
-
-    factory.AddVariable( "vtx_prob","P_{vertex}", "", 'F' );
-
-    #factory.AddVariable( "cos_theta_star","cos(#theta)*", "", 'F' );
-    #factory.AddVariable( "max_eta","max(#eta^{lead},#eta^{sub.})", "", 'F' );
-    #factory.AddVariable( "min_r9","min(r9^{lead},r9^{sub.})", "", 'F' );
-
-    factory.AddVariable( "deltaMOverM","#DeltaM / M_{Hypth}.",  'F' )
-        
     input = TFile.Open( infname )
 
     # Get the signal and background trees for training
@@ -195,8 +189,10 @@ def main():
     factory.PrepareTrainingAndTestTree( mycut, mycut, "nTrain_Signal=0:nTrain_Background=0:NormMode=NumEvents:!V")
     # Boosted Decision Trees
     # NEW PARAMETERS
-    factory.BookMethod( TMVA.Types.kBDT, "BDT_ada" +mass_str+cat_str,"!H:!V:NTrees=400:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.05:SeparationType=GiniIndex:nCuts=50:PruneMethod=NoPruning")
-    factory.BookMethod( TMVA.Types.kBDT, "BDT_grad"+mass_str+cat_str,"!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=50:NNodesMax=5") 
+    #factory.BookMethod( TMVA.Types.kBDT, "BDT_ada" +mass_str+cat_str,"!H:!V:NTrees=400:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.05:SeparationType=GiniIndex:nCuts=50:PruneMethod=NoPruning")
+    #factory.BookMethod( TMVA.Types.kBDT, "BDT_grad"+mass_str+cat_str,"!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=50:NNodesMax=5") 
+    factory.BookMethod( TMVA.Types.kBDT, "BDT", "!H:!V:NTrees=850:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning" );
+    factory.BookMethod( TMVA.Types.kBDT, "BDTG", "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20")
     #test
 
     # --------------------------------------------------------------------------------------------------
