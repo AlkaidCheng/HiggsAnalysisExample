@@ -1002,29 +1002,42 @@ void MassFactorizedMvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
       float pt_lead    = lead_p4_cic.Pt();
       float pt_sublead = sublead_p4_cic.Pt();
 
+
+
+      float hoe_1 = l.pho_hoe[diphoton_index_cic.first]; 
+      float sieie_1 =l.pho_sieie[diphoton_index_cic.first];
+      float ecaliso_1 = l.pho_ecalsumetconedr03[diphoton_index_cic.first]-0.012*pt_lead;
+      float hcaliso_1 = l.pho_hcalsumetconedr03[diphoton_index_cic.first]-0.005*pt_lead; 
+      float trkiso_1 = l.pho_trksumpthollowconedr03[diphoton_index_cic.first]-0.002*pt_lead;
       float hcalecal_1 = l.pho_ecalsumetconedr03[diphoton_index_cic.first] +l.pho_hcalsumetconedr03[diphoton_index_cic.first]-l.rho*rhofac;
-      float hcalecal_2 = l.pho_ecalsumetconedr03[diphoton_index_cic.second]+l.pho_hcalsumetconedr03[diphoton_index_cic.second]-l.rho*rhofac;
-
-
+      float abstrkiso_1 = (*l.pho_tkiso_recvtx_030_002_0000_10_01)[diphoton_index_cic.first][l.dipho_vtxind[diphoton_id_cic]];
       float trkiso_hollow_1 = l.pho_trksumpthollowconedr03[diphoton_index_cic.first];
+
+      float hoe_2 = l.pho_hoe[diphoton_index_cic.second]; 
+      float sieie_2 =l.pho_sieie[diphoton_index_cic.second];
+      float ecaliso_2 = l.pho_ecalsumetconedr03[diphoton_index_cic.second]-0.012*pt_sublead;
+      float hcaliso_2 = l.pho_hcalsumetconedr03[diphoton_index_cic.second]-0.005*pt_sublead; 
+      float trkiso_2 = l.pho_trksumpthollowconedr03[diphoton_index_cic.second]-0.002*pt_sublead;
+      float hcalecal_2 = l.pho_ecalsumetconedr03[diphoton_index_cic.second]+l.pho_hcalsumetconedr03[diphoton_index_cic.second]-l.rho*rhofac;
+      float abstrkiso_2 = (*l.pho_tkiso_recvtx_030_002_0000_10_01)[diphoton_index_cic.second][l.dipho_vtxind[diphoton_id_cic]];
       float trkiso_hollow_2 = l.pho_trksumpthollowconedr03[diphoton_index_cic.second];
 
-      l.FillHist("hoe_1",2,l.pho_hoe[diphoton_index_cic.first] ,evweight_cic); 
-      l.FillHist("sieie_1",2,l.pho_sieie[diphoton_index_cic.first],evweight_cic); 
-      l.FillHist("ecaliso_1",2,l.pho_ecalsumetconedr03[diphoton_index_cic.first]-0.012*pt_lead,evweight_cic);
-      l.FillHist("hcaliso_1",2,l.pho_hcalsumetconedr03[diphoton_index_cic.first]-0.005*pt_lead,evweight_cic); 
-      l.FillHist("trkiso_1",2,l.pho_trksumpthollowconedr03[diphoton_index_cic.first]-0.002*pt_lead,evweight_cic); 
+      l.FillHist("hoe_1",2,hoe_1,evweight_cic); 
+      l.FillHist("sieie_1",2,sieie_1,evweight_cic); 
+      l.FillHist("ecaliso_1",2,ecaliso_1,evweight_cic);
+      l.FillHist("hcaliso_1",2,hcaliso_1,evweight_cic);
+      l.FillHist("trkiso_1",2,trkiso_1,evweight_cic);
       l.FillHist("hcalecal_1",2,hcalecal_1,evweight_cic);
-      l.FillHist("abstrkiso_1",2,l.SumTrackPtInCone(&lead_p4_cic, l.dipho_vtxind[diphoton_id_cic], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight_cic);
+      l.FillHist("abstrkiso_1",2,abstrkiso_1,evweight_cic);
       l.FillHist("trkiso_hollow03_1",2,trkiso_hollow_1,evweight_cic);
 
-      l.FillHist("hoe_2",2,l.pho_hoe[diphoton_index_cic.second] ,evweight_cic); 
-      l.FillHist("sieie_2",2,l.pho_sieie[diphoton_index_cic.second],evweight_cic); 
-      l.FillHist("ecaliso_2",2,l.pho_ecalsumetconedr03[diphoton_index_cic.second]-0.012*pt_sublead,evweight_cic);
-      l.FillHist("hcaliso_2",2,l.pho_hcalsumetconedr03[diphoton_index_cic.second]-0.005*pt_sublead,evweight_cic); 
-      l.FillHist("trkiso_2",2,l.pho_trksumpthollowconedr03[diphoton_index_cic.second]-0.002*pt_sublead,evweight_cic); 
+      l.FillHist("hoe_2",2,hoe_2,evweight_cic); 
+      l.FillHist("sieie_2",2,sieie_2,evweight_cic); 
+      l.FillHist("ecaliso_2",2,ecaliso_2,evweight_cic);
+      l.FillHist("hcaliso_2",2,hcaliso_2,evweight_cic);
+      l.FillHist("trkiso_2",2,trkiso_2,evweight_cic);
       l.FillHist("hcalecal_2",2,hcalecal_2,evweight_cic);
-      l.FillHist("abstrkiso_2",2,l.SumTrackPtInCone(&lead_p4_cic, l.dipho_vtxind[diphoton_id_cic], 0, 0.30, 0.02, 0.0, 1.0, 0.1) ,evweight_cic);
+      l.FillHist("abstrkiso_2",2,abstrkiso_2,evweight_cic);
       l.FillHist("trkiso_hollow03_2",2,trkiso_hollow_2,evweight_cic);
 
       l.FillHist("ggM",2,Higgs_cic.M(),evweight_cic);
@@ -1061,22 +1074,53 @@ void MassFactorizedMvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
       l.FillHist("E1",2,lead_p4_cic.E(),evweight_cic);
       l.FillHist("E2",2,sublead_p4_cic.E(),evweight_cic);
 
+      eventListText <<  " Run=" << l.run << "  LS=" << l.lumis << "  Event=" << l.event;
+      eventListText << " phoMVA_1="<<phoid_mvaout_lead;
+      eventListText << " phoMVA_1="<<phoid_mvaout_sublead;
 
-      eventListText << "spurious event: ";
+      eventListText << " hoe_1="           << hoe_1 ;
+      eventListText << " sieie_1="         << sieie_1 ;
+      eventListText << " ecaliso_1="       << ecaliso_1 ;
+      eventListText << " hcaliso_1="       << hcaliso_1 ;
+      eventListText << " trkiso_1="        << trkiso_1;
+      eventListText << " hcalecal_1="      << hcalecal_1;
+      eventListText << " abstrkiso_1= "    << abstrkiso_1;
+      eventListText << " trkiso_hollow_1=" << trkiso_hollow_1;
+
+      eventListText << " hoe_2="           << hoe_2 ;
+      eventListText << " sieie_2="         << sieie_2 ;
+      eventListText << " ecaliso_2="       << ecaliso_2 ;
+      eventListText << " hcaliso_2="       << hcaliso_2 ;
+      eventListText << " trkiso_2="        << trkiso_2;
+      eventListText << " hcalecal_2="      << hcalecal_2;
+      eventListText << " abstrkiso_2= "    << abstrkiso_2;
+      eventListText << " trkiso_hollow_2=" << trkiso_hollow_2;
+
+      eventListText << " CUTS" ;
+
+
       if (hcalecal_1 > 3.){
-        eventListText << "FAIL:HCALECAL_1 ";
+        eventListText << " FAIL:HCALECAL_1";
       }
       if (hcalecal_2 > 3.){
-        eventListText << "FAIL:HCALECAL_2 ";
-      }
-      if (trkiso_hollow_1 > 4.){
-        eventListText << "FAIL:TRKISOHOLLOW_1 ";
-      }
-      if (trkiso_hollow_2 > 4.){
-        eventListText << "FAIL:TRKISOHOLLOW_2 ";
+        eventListText << " FAIL:HCALECAL_2";
       }
 
-      eventListText << "END" << endl;
+      if (abstrkiso_1 > 2.8){
+        eventListText << " FAIL:ABSTRKISO_1";
+      }
+      if (abstrkiso_2 > 2.8){
+        eventListText << " FAIL:ABSTRKISO_2";
+      }
+
+      if (trkiso_hollow_1 > 4.){
+        eventListText << " FAIL:TRKISOHOLLOW_1";
+      }
+      if (trkiso_hollow_2 > 4.){
+        eventListText << " FAIL:TRKISOHOLLOW_2";
+      }
+
+      eventListText << ";" << endl;
 
     }
 
