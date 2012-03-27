@@ -1,9 +1,10 @@
-intL=4763. histfile=CMS-HGG_newrebinning.root output=shifo.root
+intL=4763. histfile=CMS-HGG.root output=shifo.root
 
 Dir=full_bdt
 ->
 Dir=cms-hgg_icvbf_fixtrkiso
 Dir=cms-hgg_icvbf_fixtrkiso_merged
+->
 
 ->
 Branches to use

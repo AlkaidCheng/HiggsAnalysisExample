@@ -107,7 +107,7 @@ doR9Syst=0
 doKFactorSmear=1
 doKFactorSyst=1
 
-mvaWeightsFolder=/vols/cms03/mjarvis/root/tmva/test/weights/
+mvaWeightsFolder=/vols/cms04/mjarvis/CMSSW_4_2_8/src/HiggsAnalysis/HiggsTo2photons/h2gglobe/Macros/weights/
 
 ->
 Inputs for reweighing
