@@ -950,8 +950,8 @@ void MvaAnalysis::Init(LoopAll& l)
     }
     else {
       if (bdtTrainingPhilosophy=="MIT") {
-        tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"TMVAClassification_BDTG.weights.xml");
-        tmvaReader_->BookMVA("BDT_grad_123", mvaWeightsFolder+"TMVAClassification_BDT.weights.xml");
+        tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"TMVAClassification_BDT.weights.xml");
+        tmvaReader_->BookMVA("BDT_grad_123", mvaWeightsFolder+"TMVAClassification_BDTG.weights.xml");
       }
       else {
         tmvaReader_->BookMVA("BDT_ada_123", mvaWeightsFolder+"/TMVAClassification_BDTadaUCSD.weights.xml");
@@ -1424,9 +1424,14 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
       // --- Fill invariant mass spectrum -------
       if (cur_type==0){  // Data
         l.rooContainer->InputDataPoint("data_mass",category,mass);
-      } else if (cur_type>0){ // Background MC
-        if (cur_type==6){l.rooContainer->InputBinnedDataPoint("zee_mass",category,mass,evweight);}
-        else {l.rooContainer->InputBinnedDataPoint("bkg_mass",category,mass,evweight);}
+      } 
+      else if (cur_type>0){ // Background MC
+        if (cur_type==6){
+          l.rooContainer->InputBinnedDataPoint("zee_mass",category,mass,evweight);
+        }
+        else {
+          l.rooContainer->InputBinnedDataPoint("bkg_mass",category,mass,evweight);
+        }
       }
 
       if (bdtoutput>=0.05) l.FillHist("all_mass",0, mass, evweight);
@@ -1490,6 +1495,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 	  if (VBFevent){ // note if includeVBF=false, VBFevent will always be false so no need to check both
             l.rooContainer->InputBinnedDataPoint("sig_VBF_"+currentTypeSignalLabel  ,category,1.+sidebandWidth+_deltaMOverM,evweight);
 	  } else {
+            cout<<"sig datapoint: bdt="<<bdt_grad<<" cat="<<category<<endl;
             l.rooContainer->InputBinnedDataPoint("sig_BDT_ada_"+currentTypeSignalLabel  ,category,bdt_ada,evweight);
             l.rooContainer->InputBinnedDataPoint("sig_BDT_grad_"+currentTypeSignalLabel ,category,bdt_grad,evweight);
 	  }

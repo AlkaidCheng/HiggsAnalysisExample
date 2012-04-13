@@ -194,13 +194,14 @@ def main():
     factory.PrepareTrainingAndTestTree( mycut, mycut,"nTrain_Signal=0:nTrain_Background=0:SplitMode=Random:NormMode=NumEvents:!V" );
     # Boosted Decision Trees
     # NEW PARAMETERS
-    #factory.BookMethod( TMVA.Types.kBDT, "BDT_ada" +mass_str+cat_str,"!H:!V:NTrees=400:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.05:SeparationType=GiniIndex:nCuts=50:PruneMethod=NoPruning")
+    factory.BookMethod( TMVA.Types.kBDT, "BDT_ada" +mass_str+cat_str,"!H:!V:NTrees=400:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.05:SeparationType=GiniIndex:nCuts=50:PruneMethod=NoPruning")
     #factory.BookMethod( TMVA.Types.kBDT, "BDT_grad"+mass_str+cat_str,"!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=50:NNodesMax=5") 
+    factory.BookMethod( TMVA.Types.kBDT, "BDT_grad"+mass_str+cat_str,"!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.10:SeparationType=GiniIndex:nCuts=50:NNodesMax=5") 
     #factory.BookMethod( TMVA.Types.kBDT, "BDT", "!H:!V:NTrees=850:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning" );
     #factory.BookMethod( TMVA.Types.kBDT, "BDTG", "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:nCuts=20")
     #test
     #factory.BookMethod( TMVA.Types.kBDT, "BDTG","!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=20");
-    factory.BookMethod( TMVA.Types.kBDT, "BDTG","!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:nCuts=20");
+    #factory.BookMethod( TMVA.Types.kBDT, "BDTG","!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.10:nCuts=20");
 
     # --------------------------------------------------------------------------------------------------
     # ---- Now you can tell the factory to train, test, and evaluate the MVAs. 
