@@ -47,6 +47,7 @@ public:
 	// Options
 	bool reRunCiCForData;
 	bool includeVBF;
+  bool makeTrees;
 	float leadEtCut;
 	float subleadEtCut;
 	std::string efficiencyFile;
@@ -139,9 +140,7 @@ protected:
 
 	//MVA variables
 	float _mgg;          
-	int _cat;           
 	float _H_pt;         
-	float _bdtoutput;
 	float _cos_d_phi;        
 	float _pho1_eta;    
 	float _pho2_eta;     
@@ -154,7 +153,11 @@ protected:
 	float _sigmaMOverM_wrongVtx;
   float _deltaMOverM; 
 	float _wt;           
-	int _sideband;           
+	float _bdtoutput;
+	int _cat;           
+	int _sideband;    
+  int _vbf;
+  float _weight;
 
 	//vector<double> weights;
 	TFile *kfacFile;
@@ -169,6 +172,9 @@ protected:
   TTree * backgroundTrainTree_7pt_[2];
   TTree * backgroundTestTree_7pt_[2];
 	TFile * mvaFile_;
+  TFile * treeFile_;
+  TTree * dataTree_;
+  TTree * sigTree_;
 	
 };
 
