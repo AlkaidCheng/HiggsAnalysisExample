@@ -14,38 +14,28 @@ parser.add_option("-W","--htmlOnly",action="store_true",default=False,help="Run 
 parser.add_option("-B","--backgroundOnly",action="store_true",default=False,help="Run correction to background model only")
 parser.add_option("-I","--sigInterpOnly",action="store_true",default=False,help="Run signal interpolation only")
 parser.add_option("-D","--datacardsOnly",action="store_true",default=False,help="Run datacard creation only")
-parser.add_option("","--atCERN",action="store_true",default=False,help="need to source setupROOT csh if at CERN")
+parser.add_option("","--atCERN",action="store_true",default=FALSE,help="need to source setupROOT csh if at CERN")
 (options,args)=parser.parse_args()
   
 interpFileName = options.fileName+"_interpolated.root"
 #-------------------------------------------------------------------------
+if options.atCERN :os.system("source setupROOT.csh")
+else:os.system("source setupROOT.sh")
+ROOT.gROOT.ProcessLine(".L createCorrectedBackgroundModel.C+g")
+os.system("cmsenv")
+ROOT.gROOT.ProcessLine(".L BDTInterpolation.C+g")
 
-if not options.htmlOnly:
-  """
-  # Make necessary folders to make plots.
-  os.system("mkdir mva-datacards-grad")
-  os.system("mkdir mva-datacards-ada")
-  os.system("mkdir mva-plots-grad")
-  os.system("mkdir mva-plots-ada")
-  os.system("mkdir BMplots")
-  os.system("mkdir plots") 
-  """
-  if options.atCERN :os.system("source setupROOT.csh")
-  else:os.system("source setupROOT.sh")
-  ROOT.gROOT.ProcessLine(".L createCorrectedBackgroundModel.C+g")
-  ROOT.gROOT.ProcessLine(".L BDTInterpolation.C+g")
-
-  from ROOT import createCorrectedBackgroundModel
-  from ROOT import BDTInterpolation
-
+from ROOT import createCorrectedBackgroundModel
+from ROOT import BDTInterpolation
 
 ROOT.gROOT.SetStyle("Plain")
 ROOT.gROOT.SetBatch()
 ROOT.gStyle.SetOptStat(0)
 
 nSidebands=6
-#datacardFile="mva-datacards"
-#mvaPlotFile="mva-plots"
+datacardFile="mva-datacards"
+mvaPlotFile="mva-plots"
+
 
 if not options.htmlOnly:
   if not options.sigInterpOnly and not options.datacardsOnly:
@@ -54,7 +44,6 @@ if not options.htmlOnly:
     print '   Corrected Background Model '
     print '----------------------------------------------------------'
     createCorrectedBackgroundModel(options.fileName,nSidebands,options.diagnostics)
-  os.system("cmsenv")
 
   if not options.backgroundOnly and not options.datacardsOnly:
     # Second interpolate intermediate signal distributions
@@ -63,8 +52,7 @@ if not options.htmlOnly:
     print '----------------------------------------------------------'
     BDTInterpolation(options.fileName,options.diagnostics,True,True)
 
-
-if not options.backgroundOnly and not options.sigInterpOnly:
+  if not options.backgroundOnly and not options.sigInterpOnly:
     # Third write datacards
     print '----------------------------------------------------------'
     print '   Writing datacards for limit '
@@ -98,5 +86,5 @@ if options.www or options.htmlOnly:
   os.system("cp -r BMplots "+outputLocation)
   os.system("ln -s "+outputLocation+" ~/public_html/"+options.outputDir+"/Latest")
   print "Plots available to view in ~/public_html/"+options.outputDir+"/Latest/"
-  print "If working on /vols/ at IC plots can be view at: \n \t \t \t www.hep.ph.ic.ac.uk/~"+user+"/"+options.outputDir+"/Latest/BMplots/grad/fCorr.html"
+  print "If working on /vols/ at IC plots can be view at: \n \t \t \t www.hep.ph.ic.ac.uk/~"+user+"/"+options.outputDir+"/Latest/plots/plots.html"
 

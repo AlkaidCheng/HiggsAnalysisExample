@@ -9,7 +9,6 @@ from ROOT import quadInterpolate
 from optparse import OptionParser
 
 from BdtToyMaker import BdtToyMaker
-from CombinedToyMaker import CombinedToyMaker
 
 g_r=ROOT.TRandom3(0)
 
@@ -67,7 +66,7 @@ def tagPseudoDijets():
 	print "Tagging Pseudo Di-jets in Global Toy"
 	for p,gtoy in enumerate(g_toydatalist):
 		unirandom=g_r.Uniform()
-		if unirandom<g_expdijet: g_toydatalist[p]=(1.+g_SIDEBANDWIDTH+gtoy[1],gtoy[1])
+		if unirandom<g_expdijet: g_toydatalist[p]=(1.5,gtoy[1])
 
 def fillToyBDT(histogram):
 
@@ -76,7 +75,7 @@ def fillToyBDT(histogram):
 	for b in range(1,histNew.GetNbinsX()+1): histNew.SetBinContent(b,0)
 	for j in range(len(toydata)):
 		val = array.array('f',[0])
-		if toydata[j][0]>1. : val[0] = toydata[j][0]
+		if toydata[j][0]>1.1 : val[0] = 1.5
 		else:g_tmva.tmvaGetVal(toydata[j][0],toydata[j][1],val)	
 		histNew.Fill(val[0])
 	listret = []
@@ -127,7 +126,7 @@ def plotDistributions(mass,data,signals,bkg,errors):
 	flatsignal.SetLineWidth(2);flatsignal.SetLineColor(ROOT.kRed);flatsignal.Scale(sigscale)
 	flatsignal1.SetLineWidth(2);flatsignal1.SetLineColor(ROOT.kGreen+4);flatsignal1.Scale(sigscale)
 		
-	leg = ROOT.TLegend(0.6,0.59,0.88,0.88);leg.SetFillColor(0);leg.SetBorderSize(0)
+	leg = ROOT.TLegend(0.56,0.56,0.88,0.88);leg.SetFillColor(0);leg.SetBorderSize(0)
 
 	for b in range(1,nbins+1):
 		additional = errors[b-1]
@@ -139,7 +138,7 @@ def plotDistributions(mass,data,signals,bkg,errors):
 	if options.splitSignal: 
 	  sigst = ROOT.THStack();sigst.Add(flatsignal);sigst.Add(flatsignal1);sigst.Draw("9samehist")
 	else:  flatsignal.Draw("9samehist")
-	flatdata.Draw("9sameP");flatdata.SetMinimum(1.0);flatdata.SetMaximum(20*flatdata.Integral())
+	flatdata.Draw("9sameP");flatdata.SetMinimum(1)
 
 	leg.AddEntry(flatdata,"Data","PLE")
 	if options.splitSignal:
@@ -150,7 +149,7 @@ def plotDistributions(mass,data,signals,bkg,errors):
 	leg.AddEntry(flatbkg,"Background","L");leg.AddEntry(fNewT,"\pm 1\sigma","F");leg.AddEntry(fNew2T,"\pm 2\sigma","F")
 	leg.Draw()
 	mytext = ROOT.TLatex();mytext.SetTextSize(0.03);mytext.SetNDC();mytext.DrawLatex(0.1,0.92,"CMS preliminary,  #sqrt{s} = 7 TeV ");mytext.SetTextSize(0.04)
-	mytext.DrawLatex(0.2,0.8,"#int L = %s"%(lumistring))
+	mytext.DrawLatex(0.2,0.2,"#int L = %s"%(lumistring))
 	leg.Draw()
 	c.SaveAs(plotOutDir+"/model_m%3.1f.pdf"%mass);c.SaveAs(plotOutDir+"/model_m%3.1f.png"%mass)
 	
@@ -262,12 +261,10 @@ def writeCard(tfile,mass,scaleErr):
   for b in range(1,nBins+1): outPut.write(" cat%d "%b)
   outPut.write("\nobservation")
 
-#  backgroundContents = [bkgHist.GetBinContent(b) for b in range(1,nBins+1)]
-  backgroundContents = []
+  backgroundContents = [bkgHist.GetBinContent(b) for b in range(1,nBins+1)]
   if options.Bias:
 	print "Using Bkg Model Corrected for mass bias"
 	backgroundContents = [bkgHistCorr.GetBinContent(b) for b in range(1,nBins+1)]
-  else: sys.exit("Simple Background model no longer available !!!! ")
 
   if options.throwToy:
         print "Throwing toy dataset"
@@ -333,40 +330,35 @@ def writeCard(tfile,mass,scaleErr):
   # 70% GGH(TTH) and 10% on the VBF(WZH) part of that category (configurable above)
   if options.includeVBF:
     print "Including VBF (last Bin) Systematics"
-    # how many non VBF bins are there?
-    nBins_inclusive=0
-    for b in range(1,nBins+1):  
-	if dataHist.GetBinLowEdge(b)<1: nBins_inclusive+=1
-
-    print "Number of Non VBF channels -> ", nBins_inclusive
-    print "Number of VBF channels -> ", nBins-nBins_inclusive
-    # calculate the effect on each bin, eg 70%, always assume last bins are VBF tagged
-    numberOfGGH_dijet = sum([gghHist.GetBinContent(b)*JetID_ggh for b in range(nBins_inclusive+1,nBins+1)])
-    numberOfTTH_dijet = sum([tthHist.GetBinContent(b)*JetID_ggh for b in range(nBins_inclusive+1,nBins+1)])
-    numberOfVBF_dijet = sum([vbfHist.GetBinContent(b)*JetID_vbf for b in range(nBins_inclusive+1,nBins+1)])
-    numberOfWZH_dijet = sum([wzhHist.GetBinContent(b)*JetID_vbf for b in range(nBins_inclusive+1,nBins+1)])
+    # calculate the effect on each bin, eg 70%, always assume last bin is VBF tag
+    numberOfGGH_dijet = gghHist.GetBinContent(nBins)*JetID_ggh
+    numberOfTTH_dijet = tthHist.GetBinContent(nBins)*JetID_ggh
+    numberOfVBF_dijet = vbfHist.GetBinContent(nBins)*JetID_vbf
+    numberOfWZH_dijet = wzhHist.GetBinContent(nBins)*JetID_vbf
     
-    numberOfGGH_incl  = sum([gghHist.GetBinContent(b) for b in range(1,nBins_inclusive+1)])
-    numberOfTTH_incl  = sum([tthHist.GetBinContent(b) for b in range(1,nBins_inclusive+1)])
-    numberOfVBF_incl  = sum([vbfHist.GetBinContent(b) for b in range(1,nBins_inclusive+1)])
-    numberOfWZH_incl  = sum([wzhHist.GetBinContent(b) for b in range(1,nBins_inclusive+1)])
+    numberOfGGH_incl  = sum([gghHist.GetBinContent(b) for b in range(1,nBins)])
+    numberOfTTH_incl  = sum([tthHist.GetBinContent(b) for b in range(1,nBins)])
+    numberOfVBF_incl  = sum([vbfHist.GetBinContent(b) for b in range(1,nBins)])
+    numberOfWZH_incl  = sum([wzhHist.GetBinContent(b) for b in range(1,nBins)])
 
     outPut.write("\nJetID_ggh  lnN ")
-    for b in range(1,nBins_inclusive+1): outPut.write(" %.3f/%.3f   -   -   %.3f/%.3f   -  "%\
+    for b in range(1,nBins): outPut.write(" %.3f/%.3f   -   -   %.3f/%.3f   -  "%\
 		    (1.-(numberOfGGH_dijet/numberOfGGH_incl),1.+(numberOfGGH_dijet/numberOfGGH_incl),\
 		     1.-(numberOfTTH_dijet/numberOfTTH_incl),1.+(numberOfTTH_dijet/numberOfTTH_incl)))
-    for b in range(nBins_inclusive+1,nBins+1): outPut.write(" %.3f/%.3f   -   -   %.3f/%.3f   -  "%(1+JetID_ggh,1-JetID_ggh,1+JetID_ggh,1-JetID_ggh))
+    outPut.write(" %.3f/%.3f   -   -   %.3f/%.3f   -  "%(1+JetID_ggh,1-JetID_ggh,1+JetID_ggh,1-JetID_ggh))
     outPut.write("\nJetID_vbf  lnN ")
-    for b in range(1,nBins_inclusive+1): outPut.write(" -  %.3f/%.3f  %.3f/%.3f  -   -  "%\
+    for b in range(1,nBins): outPut.write(" -  %.3f/%.3f  %.3f/%.3f  -   -  "%\
 		    (1.-(numberOfVBF_dijet/numberOfVBF_incl),1.+(numberOfVBF_dijet/numberOfVBF_incl),\
 		     1.-(numberOfWZH_dijet/numberOfWZH_incl),1.+(numberOfWZH_dijet/numberOfWZH_incl)))
-    for b in range(nBins_inclusive+1,nBins+1):  outPut.write(" -  %.3f/%.3f   %.3f/%.3f  -   -  "%(1+JetID_vbf,1-JetID_vbf,1+JetID_vbf,1-JetID_vbf))
+    outPut.write(" -  %.3f/%.3f   %.3f/%.3f  -   -  "%(1+JetID_vbf,1-JetID_vbf,1+JetID_vbf,1-JetID_vbf))
     outPut.write("\n")
 
+    
+   
   # Now is the very tedious part of the signal shape systematics, for each shape, simply do -/+ sigma
   
   if options.signalSys:
-   print "Writing Systematics Part (could be slow)"
+   print "Writing Systematics Part (coule be slow)"
    for sys in systematics:
 
     gghHistU  = tfile.Get("th1f_sig_"+type+"_ggh_%3.1f_cat0_%sUp01_sigma"%(mass,sys))
@@ -463,15 +455,11 @@ parser.add_option("","--expSig",dest="expSig",default=-1.,type="float")
 parser.add_option("","--makePlot",dest="makePlot",default=False,action="store_true")
 parser.add_option("","--noVbfTag",dest="includeVBF",default=True,action="store_false")
 parser.add_option("","--plotStackedVbf",dest="splitSignal",default=False,action="store_true")
-parser.add_option("","--inputMassFacWS",dest="inputmassfacws",default="CMS-HGG_massfac_full_110_150_1.root")
-parser.add_option("","--outputMassFacToy",dest="outputmassfactoy",default="massfac_toy_ws.root")
-parser.add_option("","--inputBdtPdf",dest="inputpdfworkspace",default="combToyWS.root")
-parser.add_option("","--outputBdtPdf",dest="bdtworkspacename",default="combToyWS.root")
-parser.add_option("","--diphotonBdtFile",dest="diphotonmvahistfilename",default="DataTree_CMS-HGG.root")
-parser.add_option("","--diphotonBdtTree",dest="diphotonmvahisttreename",default="dataTree")
-parser.add_option("","--signalModelFile",dest="signalfilename",default="sigtree.root")
-parser.add_option("","--signalModelTree",dest="signaltreename",default="sigtree")
-parser.add_option("","--tmvaWeightsFolder",dest="tmvaweightsfolder",default="/vols/cms02/h2g/weights/wt_19Feb/")
+parser.add_option("","--inputBdtPdf",dest="inputpdfworkspace")
+parser.add_option("","--outputBdtPdf",dest="bdtworkspacename",default="bdtws.root")
+parser.add_option("","--diphotonBdtFile",dest="diphotonmvahistfilename",default="bdttree.root")
+parser.add_option("","--diphotonBdtTree",dest="diphotonmvahisttreename",default="bdttree")
+parser.add_option("","--tmvaWeightsFolder",dest="tmvaweightsfolder",default="/vols/cms02/h2g/weights/wt_01Feb/")
 parser.add_option("","--reweightSignalYields",dest="signalyieldsweight",default=-999.,type="float")
 parser.add_option("-m","--mass",dest="singleMass",default=-1.,type="float")
 parser.add_option("-t","--type",dest="bdtType",default="grad");
@@ -490,8 +478,6 @@ type=options.bdtType
 
 # create output folders
 cardOutDir="mva-datacards-"+type
-if not options.signalSys:
-  cardOutDir+="-nosigsys"
 if not os.path.isdir(cardOutDir):
   os.makedirs(cardOutDir)
 if options.makePlot:
@@ -510,14 +496,13 @@ genMasses     = [110,115,120,125,130,135,140,145,150]
 #scalingErrors = [1.00815,1.01024,1.01076,1.01197,1.0099,1.009,1.00928,1.01054 ] 	  # Takes from P.Dauncey studies -> 2% window (100-180) / MIT Preselection
 #scalingErrors = [ 1.008,1.008,1.008,1.008,1.01,1.010,1.011,1.012,1.012] # P.Dauncey 100-180 2% window /MIT preselction +BDT>-0.5
 #scalingErrors = [1.0136,1.0152,1.01425,1.01102,1.01283,1.01568,1.02157,1.02467,1.02466] # P.Dauncey 100-180, 2% window, MIT presel + BDT > 0.05 (Pow2 Fit)
-#scalingErrors = [1.0119,1.01277,1.01203,1.00998,1.01213,1.0141,1.01822,1.02004,1.01954] # P.Dauncey 100-180, 2% window, MIT presel + BDT > 0.05 , after synch(Pow2 Fit)
+scalingErrors = [1.0119,1.01277,1.01203,1.00998,1.01213,1.0141,1.01822,1.02004,1.01954] # P.Dauncey 100-180, 2% window, MIT presel + BDT > 0.05 , after synch(Pow2 Fit)
+ 
 #scalingErrors = [1.025,1.025,1.025,1.025,1.025,1.025,1.025,1.025,1.025] # FLAT 25%
 #scalingErrors = [ 1.01185,1.01292,1.01378,1.01378,1.01594,1.01539,1.01814,1.02052,1.02257] # P.Dauncey 100-180, 2% window, MIT presel + BDT > 0.05 (Pol5 Fit)
 #scalingErrors=[1+((s-1)*0.95) for s in scalingErrors]
-scalingErrors = [1.01153,1.01197,1.01102,1.00966,1.01205,1.01457,1.01814,1.01903,1.01768] # P.Dauncey 100-180, 2% window, MIT presel + BDT > 0.05 , after synch, 19Feb (Pow2 Fit)
 
-#evalMasses    = numpy.arange(110,150.5,0.5)
-evalMasses    = numpy.arange(110.0,150.5,0.5)
+evalMasses    = numpy.arange(110,150.5,0.5)
 normG = ROOT.TGraph(len(genMasses))
 
 # Fill the errors graph
@@ -535,35 +520,23 @@ can.SaveAs("normErrors_%s.pdf"%options.tfileName)
 # can make a special "global toy" set of datacards
 toymaker=0
 if options.throwGlobalToy:
-  if not options.inputpdfworkspace: 
-    backgrounddiphotonmvafile=ROOT.TFile(options.diphotonmvahistfilename)
-    signaldiphotonmvafile=ROOT.TFile(options.signalfilename)
-  #toymaker = BdtToyMaker(options.tfileName,"data_pow_model_150.0")
-  #toymaker.fitData()
-  toymaker = CombinedToyMaker(options.inputmassfacws)
+  if not options.inputpdfworkspace: backgrounddiphotonmvafile=ROOT.TFile(options.diphotonmvahistfilename)
+  toymaker = BdtToyMaker(options.tfileName,"data_pow_model_150.0")
+  toymaker.fitData()
 
   if options.inputpdfworkspace:
     if not os.path.isfile(options.inputpdfworkspace): 
 	sys.exit("No file named %s, generate it first (remove option)"%options.inputpdfworkspace)
-    toymaker.loadKeysPdf(options.inputpdfworkspace)
-    #if options.expSig>0: toymaker.loadKeysPdf(backgroundpdfws,1)
-    #else: toymaker.loadKeysPdf(backgroundpdfws,0)
+    backgroundpdfws = ROOT.TFile(options.inputpdfworkspace)
+    toymaker.loadKeysPdf(backgroundpdfws)	
   else: 
     backgrounddiphotonmvahist=backgrounddiphotonmvafile.Get(options.diphotonmvahisttreename)
-    print 'Creating keys pdf from ', backgrounddiphotonmvahist.GetName(), ' with ', backgrounddiphotonmvahist.GetEntries(), ' entries '
     toymaker.createKeysPdf(backgrounddiphotonmvahist)	
-    #if options.expSig>0: 
-    #  signaldiphotonmvahist=signaldiphotonmvafile.Get(options.signaltreename)
-    #  print 'Creating keys pdf from ', signaldiphotonmvahist.GetName(), ' with ', signaldiphotonmvahist.GetEntries(), ' entries '
-    #  toymaker.createSigHistPdf(signaldiphotonmvahist)
-    toymaker.savePdfWorkspace(options.bdtworkspacename)
+    toymaker.saveBdtWorkspace(options.bdtworkspacename)
 
-  toymaker.plotData(160,180)
-  toymaker.genData(cardOutDir+"/"+options.outputmassfactoy)
-  toymaker.plotToy(160,200)
-  toymaker.saveToyWorkspace("testToyWS.root")
-  #toymaker.genData(options.expSig)
-  #if options.expSig>0: toymaker.plotSigData(160)
+  toymaker.genData()
+#  toymaker.plotRealData(160)
+#  toymaker.plotGenData(160)
   ROOT.gROOT.ProcessLine(".L tmvaLoader.C+")
   from ROOT import tmvaLoader
   g_tmva = tmvaLoader(options.tmvaweightsfolder+"/TMVAClassification_BDT%sMIT.weights.xml"%options.bdtType,options.bdtType)
@@ -575,8 +548,7 @@ if options.singleMass>0: evalMasses=[float(options.singleMass)]
 for m in evalMasses: 
 	if options.throwGlobalToy: 
 		g_toydatalist=toymaker.returnWindowToyData(float(m),g_SIDEBANDWIDTH)
-		#tagging of jets now implicitly taken car of in CombinedToyMaker
-    #if options.includeVBF: tagPseudoDijets()
+		if options.includeVBF: tagPseudoDijets()
 	#print toymaker.getN(m,0.02)
 	writeCard(tfile,m,normG.Eval(m))
 print "Done Writing Cards"

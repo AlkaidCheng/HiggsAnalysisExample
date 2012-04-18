@@ -47,7 +47,6 @@ public:
 	// Options
 	bool reRunCiCForData;
 	bool includeVBF;
-  bool makeTrees;
 	float leadEtCut;
 	float subleadEtCut;
 	std::string efficiencyFile;
@@ -96,17 +95,6 @@ public:
     	std::vector<float> bkg_masses; //This is for Nicks training method
 
 	std::string mvaWeightsFolder;
-
-	// Bin edges pre-defined
-	bool rederiveOptimizedBinEdges;
-	std::vector<double> VbfBinEdges_110, GradBinEdges_110, AdaBinEdges_110;
-	std::vector<double> VbfBinEdges_115, GradBinEdges_115, AdaBinEdges_115;
-	std::vector<double> VbfBinEdges_120, GradBinEdges_120, AdaBinEdges_120;
-	std::vector<double> VbfBinEdges_125, GradBinEdges_125, AdaBinEdges_125;
-	std::vector<double> VbfBinEdges_130, GradBinEdges_130, AdaBinEdges_130;
-	std::vector<double> VbfBinEdges_135, GradBinEdges_135, AdaBinEdges_135;
-	std::vector<double> VbfBinEdges_140, GradBinEdges_140, AdaBinEdges_140;
-	std::vector<double> VbfBinEdges_150, GradBinEdges_150, AdaBinEdges_150;
 
 protected:
 	std::vector<BaseSmearer *> photonSmearers_;
@@ -170,9 +158,7 @@ protected:
 	float _wt;           
 	float _bdtoutput;
 	int _cat;           
-	int _sideband;    
-  int _vbf;
-  float _weight;
+	int _sideband;           
 
 	//vector<double> weights;
 	TFile *kfacFile;
@@ -187,9 +173,6 @@ protected:
   TTree * backgroundTrainTree_7pt_[2];
   TTree * backgroundTestTree_7pt_[2];
 	TFile * mvaFile_;
-  TFile * treeFile_;
-  TTree * dataTree_;
-  TTree * sigTree_;
 	
 };
 
