@@ -59,7 +59,7 @@ splitBackgroundSample=0
 choose between UCSD and MIT trainings
 ->
 
-bdtTrainingPhilosophy=MIT
+bdtTrainingPhilosophy=IC
 photonLevelMvaUCSD=aux/ID_UCSD.weights.xml
 eventLevelMvaUCSD=aux/diphoton_UCSD.weights.xml
 photonLevelMvaMIT_EB=aux/TMVAClassificationPhotonID_Barrel_PassPreSel_Variable_10_BDTnCuts2000_BDT.weights.xml
@@ -107,7 +107,10 @@ doR9Syst=0
 doKFactorSmear=1
 doKFactorSyst=1
 
+->
 mvaWeightsFolder=/vols/cms02/h2g/weights/wt_01Feb/
+->
+mvaWeightsFolder=/vols/cms03/mjarvis/CMSSW_4_2_8/src/HiggsAnalysis/HiggsTo2photons/h2gglobe/Macros/weights/
 
 ->
 Inputs for reweighing
