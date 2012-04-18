@@ -714,8 +714,23 @@ void MvaAnalysis::Init(LoopAll& l)
     //Set up TMVA reader (only two variables)
     tmvaReader_= new TMVA::Reader();
 
-    tmvaReader_->AddVariable("bdtoutput",&_bdtoutput);
-    tmvaReader_->AddVariable("deltaMOverM", &_deltaMOverM);
+    if (bdtTrainingPhilosophy=="MIT"){
+      tmvaReader_->AddVariable("bdtoutput",&_bdtoutput);
+      tmvaReader_->AddVariable("deltaMOverM", &_deltaMOverM);
+    }
+    else if (bdtTrainingPhilosophy=="IC"){
+      tmvaReader_->AddVariable( "cos_d_phi", &_cos_d_phi);
+      tmvaReader_->AddVariable( "pho1_eta", &_pho1_eta );
+      tmvaReader_->AddVariable( "pho2_eta", &_pho2_eta );
+      tmvaReader_->AddVariable( "pho1_ptOverM",  &_pho1_ptOverM);
+      tmvaReader_->AddVariable( "pho2_ptOverM", &_pho2_ptOverM );
+      tmvaReader_->AddVariable( "pho1_mva", &_pho1_mva );
+      tmvaReader_->AddVariable( "pho2_mva", &_pho2_mva );
+      tmvaReader_->AddVariable( "sigmaMOverM", &_sigmaMOverM );
+      tmvaReader_->AddVariable( "sigmaMOverM_wrongVtx", &_sigmaMOverM_wrongVtx );
+      tmvaReader_->AddVariable( "vtx_prob", &_vtx_prob );
+      tmvaReader_->AddVariable("deltaMOverM", &_deltaMOverM);
+    }
 
     //Invariant Mass Spectra
     l.rooContainer->CreateDataSet("CMS_hgg_mass","data_mass",nDataBins);
