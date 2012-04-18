@@ -1530,7 +1530,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 	  if (VBFevent){ // note if includeVBF=false, VBFevent will always be false so no need to check both
             l.rooContainer->InputBinnedDataPoint("sig_VBF_"+currentTypeSignalLabel  ,category,1.+sidebandWidth+_deltaMOverM,evweight);
 	  } else {
-            cout<<"sig datapoint: bdt="<<bdt_grad<<" cat="<<category<<endl;
+            //cout<<"sig datapoint: bdt="<<bdt_grad<<" cat="<<category<<endl;
             l.rooContainer->InputBinnedDataPoint("sig_BDT_ada_"+currentTypeSignalLabel  ,category,bdt_ada,evweight);
             l.rooContainer->InputBinnedDataPoint("sig_BDT_grad_"+currentTypeSignalLabel ,category,bdt_grad,evweight);
 	  }
