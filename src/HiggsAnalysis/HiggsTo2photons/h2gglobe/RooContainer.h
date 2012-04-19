@@ -7,6 +7,7 @@
 #include "TPaveText.h"
 #include "TLatex.h"
 #include "TH1F.h"
+#include "TF1.h"
 #include "TAxis.h"
 #include "TString.h"
 #include "TMath.h"

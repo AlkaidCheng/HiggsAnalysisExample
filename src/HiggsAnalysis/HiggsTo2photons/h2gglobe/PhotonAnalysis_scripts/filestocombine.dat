@@ -1,4 +1,4 @@
-intL=4763. histfile=comb.root output=shifo.root
+intL=4763. histfile=CMS-HGG.root output=shifo.root
 
 
 Dir=full_bdt

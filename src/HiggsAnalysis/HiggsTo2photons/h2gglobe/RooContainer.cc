@@ -2645,22 +2645,26 @@ void RooContainer::removeDuplicateElements(std::vector<RooAbsPdf*> &k){
 void RooContainer::histogramSmoothing(TH1F* h, int n){
    // Nothing too special, a function which will smooth a histogram but ignore the first and last
    // bins, useful for the "flat-binning" approach! 
-   if (h->GetNbinsX()>3){
+   if (h->GetNbinsX()>3)
+   {
      int nbin = h->GetNbinsX();
      TH1F *h2 = new TH1F(Form("hn%s",h->GetName()),Form("hn%s",h->GetName()),nbin-2,0,1);
      for (int i=1;i<=nbin-2;i++){
-           h2->SetBinContent(i,h->GetBinContent(i+1));
+       h2->SetBinContent(i,h->GetBinContent(i+1));
      }
-     h2->Smooth(n);
+     h->Fit("pol9","F","",h->GetBinLowEdge(2),h->GetBinLowEdge(h->GetNbinsX()));
+     //h2->Smooth(n);
      for (int i=2;i<=nbin-1;i++){
-           h->SetBinContent(i,h2->GetBinContent(i-1));
+       if (h->GetFunction("pol9")->Eval(h->GetBinCenter(i-1)) < 0){
+         h->SetBinContent(i,0.5*(h->GetBinContent(i-1)+h->GetBinContent(i+1)));
+
+       } else {
+         h->SetBinContent(i,h->GetFunction("pol9")->Eval(h->GetBinCenter(i)));
+       }
      }
 
    }
-
    return;
-
-   
 }
 // ----------------------------------------------------------------------------------------------------
 void RooContainer::makeSystematics(std::string observable,std::string s_name, int effect){
