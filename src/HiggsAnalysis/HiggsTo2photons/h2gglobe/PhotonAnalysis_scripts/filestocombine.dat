@@ -1,11 +1,12 @@
-intL=4763. histfile=test.root output=shifo.root
+intL=4763. histfile=comb.root output=shifo.root
 
 
-Fil=/vols/cms02/h2g/latest_workspace/CMS-HGG_10-02-2012_an048_icbdt_interpolated.root
+Dir=full_bdt
 ->
-Dir=cms-hgg_icvbf_fixtrkiso
+Fil=/vols/cms02/h2g/latest_workspace/CMS-HGG_10-02-2012_an048_icbdt_interpolated.root
 Dir=cms-hgg_icvbf_fixtrkiso_merged
 ->
+
 ->
 Branches to use
 ->

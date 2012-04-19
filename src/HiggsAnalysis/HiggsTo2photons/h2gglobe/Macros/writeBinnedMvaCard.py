@@ -261,7 +261,7 @@ def writeCard(tfile,mass,scaleErr):
   for b in range(1,nBins+1): outPut.write(" cat%d "%b)
   outPut.write("\nobservation")
 
-  backgroundContents = [bkgHist.GetBinContent(b) for b in range(1,nBins+1)]
+  #backgroundContents = [bkgHist.GetBinContent(b) for b in range(1,nBins+1)]
   if options.Bias:
 	print "Using Bkg Model Corrected for mass bias"
 	backgroundContents = [bkgHistCorr.GetBinContent(b) for b in range(1,nBins+1)]
