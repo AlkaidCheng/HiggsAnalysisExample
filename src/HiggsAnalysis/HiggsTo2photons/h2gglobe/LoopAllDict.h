@@ -16,6 +16,7 @@
 #define G__DICTIONARY
 #define G__PRIVATE_GVALUE
 #include "G__ci.h"
+#include "FastAllocString.h"
 extern "C" {
 extern void G__cpp_setup_tagtableLoopAllDict();
 extern void G__cpp_setup_inheritanceLoopAllDict();
@@ -56,6 +57,7 @@ using namespace std;
 #endif
 
 extern G__linked_taginfo G__LoopAllDictLN_TDirectory;
+extern G__linked_taginfo G__LoopAllDictLN_TString;
 extern G__linked_taginfo G__LoopAllDictLN_vectorlEshortcOallocatorlEshortgRsPgR;
 extern G__linked_taginfo G__LoopAllDictLN_vectorlEunsignedsPshortcOallocatorlEunsignedsPshortgRsPgR;
 extern G__linked_taginfo G__LoopAllDictLN_vectorlEunsignedsPintcOallocatorlEunsignedsPintgRsPgR;
@@ -66,7 +68,6 @@ extern G__linked_taginfo G__LoopAllDictLN_basic_ofstreamlEcharcOchar_traitslEcha
 extern G__linked_taginfo G__LoopAllDictLN_string;
 extern G__linked_taginfo G__LoopAllDictLN_vectorlEROOTcLcLTSchemaHelpercOallocatorlEROOTcLcLTSchemaHelpergRsPgR;
 extern G__linked_taginfo G__LoopAllDictLN_reverse_iteratorlEvectorlEROOTcLcLTSchemaHelpercOallocatorlEROOTcLcLTSchemaHelpergRsPgRcLcLiteratorgR;
-extern G__linked_taginfo G__LoopAllDictLN_TString;
 extern G__linked_taginfo G__LoopAllDictLN_TClonesArray;
 extern G__linked_taginfo G__LoopAllDictLN_iteratorlEbidirectional_iterator_tagcOTObjectmUcOlongcOconstsPTObjectmUmUcOconstsPTObjectmUaNgR;
 extern G__linked_taginfo G__LoopAllDictLN_TFile;
