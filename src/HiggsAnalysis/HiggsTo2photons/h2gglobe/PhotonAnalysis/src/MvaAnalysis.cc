@@ -247,6 +247,8 @@ void MvaAnalysis::Term(LoopAll& l)
       std::vector <std::vector<double> > optimizedGradBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20,50);
       std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20,50);
 
+      //std::vector <std::vector<double> > optimizedGradBins = l.rooContainer->SignificanceOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20);
+      //std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SignificanceOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20);
 
       double mass_h_low;      
       double mass_h_high;
@@ -1374,7 +1376,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
           bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
           bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
           if (bdtoutput>=0.05) {
             l.FillHist("signal_pt_msig",0, Higgs.Pt(), evweight);
@@ -1502,7 +1504,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
 
               bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
               bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
               if (mass_hypothesis == masses[i]) {
 
@@ -1587,7 +1589,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
                   SetBDTInputVariables(&lead_p4,&sublead_p4,phoid_mvaout_lead,phoid_mvaout_sublead,massResolutionCalculator,vtx_mva,mass_hypothesis_low,bdtoutput,evweight);
                   bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
                   bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
                   if (mass_hypothesis == masses[i]) {
 
@@ -1674,7 +1676,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
                   SetBDTInputVariables(&lead_p4,&sublead_p4,phoid_mvaout_lead,phoid_mvaout_sublead,massResolutionCalculator,vtx_mva,mass_hypothesis_high,bdtoutput,evweight);
                   bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
                   bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
                   if (mass_hypothesis == masses[i]) {
 
@@ -1949,7 +1951,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,phoid_mvaout_lead,phoid_mvaout_sublead,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
@@ -2055,7 +2057,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,phoid_mvaout_lead,phoid_mvaout_sublead,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
@@ -2291,7 +2293,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
             SetBDTInputVariables(&lead_p4,&sublead_p4,phoid_mvaout_lead,phoid_mvaout_sublead,massResolutionCalculator,vtx_mva,mass_hypothesis,bdtoutput,evweight);
             float bdt_ada  = tmvaReader_->EvaluateMVA( "BDT_ada_123" );
             float bdt_grad = tmvaReader_->EvaluateMVA( "BDT_grad_123" );
-          if (bdt_grad < 0.0) category = -1;
+          //if (bdt_grad < 0.0) category = -1;
 
             categories.push_back(category);
 	    if (VBFevent){
