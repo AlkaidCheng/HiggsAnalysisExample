@@ -1,9 +1,10 @@
 intL=4763. histfile=CMS-HGG.root output=shifo.root
 
 
-Dir=full_bdt
+Dir=full_bdt_4_30
 ->
-Fil=/vols/cms02/h2g/latest_workspace/CMS-HGG_10-02-2012_an048_icbdt_interpolated.root
+Dir=combine_folder
+Fil=./CMS-HGG_0.root
 Dir=cms-hgg_icvbf_fixtrkiso_merged
 ->
 

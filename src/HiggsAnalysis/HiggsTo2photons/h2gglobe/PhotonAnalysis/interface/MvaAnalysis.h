@@ -85,6 +85,7 @@ public:
 
 	int nMasses;
 
+  bool is_subjob;
 	bool doTraining;
 	bool splitSignalSample;
 	bool splitBackgroundSample;

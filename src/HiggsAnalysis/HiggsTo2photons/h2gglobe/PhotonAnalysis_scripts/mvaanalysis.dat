@@ -52,6 +52,7 @@ doTriggerSelection=1
 reRunCiCForData=1
 
 doTraining=0
+is_subjob=0
 splitSignalSample=0
 splitBackgroundSample=0
 

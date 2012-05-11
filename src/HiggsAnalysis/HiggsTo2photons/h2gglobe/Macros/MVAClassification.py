@@ -15,7 +15,7 @@ import getopt # command line parser
 
 # Default settings for command line arguments
 DEFAULT_OUTFNAME = "TMVA"
-DEFAULT_INFNAME  = "TMVA_input_CMS-HGG_4686pb.root"
+DEFAULT_INFNAME  = "TMVA_input_training.root"
 DEFAULT_TREESIG  = "sig"
 DEFAULT_TREEBKG  = "bkg"
 DEFAULT_METHODS  = "BDT"
@@ -193,11 +193,35 @@ def main():
     # Here, the relevant variables are copied over in new, slim trees that are
     # used for TMVA training and testing
     factory.PrepareTrainingAndTestTree( mycut, mycut, "nTrain_Signal=0:nTrain_Background=0:NormMode=NumEvents:!V")
+
     # Boosted Decision Trees
-    # NEW PARAMETERS
-    factory.BookMethod( TMVA.Types.kBDT, "BDT_ada" +mass_str+cat_str,"!H:!V:NTrees=400:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.05:SeparationType=GiniIndex:nCuts=50:PruneMethod=NoPruning")
-    factory.BookMethod( TMVA.Types.kBDT, "BDT_grad"+mass_str+cat_str,"!H:!V:NTrees=500:BoostType=Grad:Shrinkage=0.10:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=50:NNodesMax=5") 
-    #test
+
+    #Default
+    #factory.BookMethod( TMVA.Types.kBDT, "BDT_gradbag", "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:UseBaggedGrad:GradBaggingFraction=0.6:SeparationType=GiniIndex:nCuts=20:NNodesMax=5" )
+    #factory.BookMethod( TMVA.Types.kBDT, "BDT_grad", "!H:!V:NTrees=1000:BoostType=Grad:Shrinkage=0.30:SeparationType=GiniIndex:nCuts=20:NNodesMax=5" )
+    #factory.BookMethod( TMVA.Types.kBDT, "BDT_ada", "!H:!V:NTrees=850:nEventsMin=150:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:SeparationType=GiniIndex:nCuts=20:PruneMethod=NoPruning" )
+
+    #MIT options
+    factory.BookMethod( TMVA.Types.kBDT, "BDT_grad", "!H:!V:NTrees=2000:BoostType=Grad:Shrinkage=0.10:SeparationType=GiniIndex:nCuts=2000:NNodesMax=15:MaxDepth=3" )
+    #<Option name="H" modified="Yes">False</Option>
+    #<Option name="NTrees" modified="Yes">2000</Option>
+    #<Option name="BoostType" modified="Yes">Grad</Option>
+    #<Option name="UseBaggedGrad" modified="Yes">False</Option>
+    #<Option name="GradBaggingFraction" modified="No">6.000000e-01</Option>
+    #<Option name="Shrinkage" modified="Yes">1.000000e-01</Option>
+    #<Option name="UseNTrainEvents" modified="No">177000</Option>
+    #<Option name="UseWeightedTrees" modified="No">True</Option>
+    #<Option name="UseYesNoLeaf" modified="No">True</Option>
+    #<Option name="NodePurityLimit" modified="No">5.000000e-01</Option>
+    #<Option name="SeparationType" modified="No">giniindex</Option>
+    #<Option name="nEventsMin" modified="No">276</Option>
+    #<Option name="nCuts" modified="Yes">2000</Option>
+    #<Option name="PruneStrength" modified="No">-1.000000e+00</Option>
+    #<Option name="PruneMethod" modified="No">costcomplexity</Option>
+    #<Option name="PruneBeforeBoost" modified="No">False</Option>
+    #<Option name="PruningValFraction" modified="No">5.000000e-01</Option>
+    #<Option name="NNodesMax" modified="Yes">15</Option>
+    #<Option name="MaxDepth" modified="Yes">3</Option>
 
     # --------------------------------------------------------------------------------------------------
     # ---- Now you can tell the factory to train, test, and evaluate the MVAs. 

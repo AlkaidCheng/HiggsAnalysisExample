@@ -60,7 +60,7 @@ void MvaAnalysis::Term(LoopAll& l)
     }
     mvaFile_->Close();
   }
-  else{
+  else if (!is_subjob) {
 
     // -----------------------------
    // l.rooContainer->AddRealVar("r1",-8,-15.,0.);
@@ -244,11 +244,12 @@ void MvaAnalysis::Term(LoopAll& l)
       l.rooContainer->SumMultiBinnedDatasets("sig_BDT_ada_all"+names[i],ada_sigsets,-1.,true);
       l.rooContainer->SumMultiBinnedDatasets("sig_BDT_grad_all"+names[i],grad_sigsets,-1.,true);
 
-      std::vector <std::vector<double> > optimizedGradBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20,50);
-      std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20,50);
+      //std::vector <std::vector<double> > optimizedGradBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20,50);
+      //std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SoverBOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20,50);
 
-      //std::vector <std::vector<double> > optimizedGradBins = l.rooContainer->SignificanceOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20);
-      //std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SignificanceOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20);
+
+      std::vector <std::vector<double> > optimizedGradBins = l.rooContainer->SignificanceOptimizedBinning("sig_BDT_grad_all"+names[i],"bkg_BDT_grad_all"+names[i],20);
+      std::vector<std::vector <double> > optimizedAdaBins =  l.rooContainer->SignificanceOptimizedBinning("sig_BDT_ada_all"+names[i],"bkg_BDT_ada_all"+names[i],20);
 
       double mass_h_low;      
       double mass_h_high;
@@ -1227,7 +1228,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
     }
     else if (bdtTrainingPhilosophy=="IC"){
       bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
-      //if (bdtoutput < 0.05) category = -1;
+      if (bdtoutput < 0.05) category = -1;
       phoid_mvaout_lead = l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,"MIT");
       phoid_mvaout_sublead = l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,"MIT");
     }
@@ -1932,6 +1933,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           } 
           else if (bdtTrainingPhilosophy=="IC"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
+            if (bdtoutput < 0.05) category = -1;
             phoid_mvaout_lead = l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,"MIT");
             phoid_mvaout_sublead = l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,"MIT");
           }
@@ -2037,9 +2039,9 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           } 
           else if (bdtTrainingPhilosophy=="IC"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT",photon_idMVA1,photon_idMVA2);
+            if (bdtoutput < 0.05) category = -1;
             phoid_mvaout_lead = l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,"MIT");
             phoid_mvaout_sublead = l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,"MIT");
-            //if (bdtoutput < 0.05) category = -1;
           } 
           else if (bdtTrainingPhilosophy=="UCSD"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"UCSD");
@@ -2274,6 +2276,7 @@ void MvaAnalysis::Analysis(LoopAll& l, Int_t jentry)
           } 
           else if (bdtTrainingPhilosophy=="IC"){
             bdtoutput = l.diphotonMVA(diphoton_index.first,diphoton_index.second,l.dipho_vtxind[diphoton_id],vtxProb,lead_p4,sublead_p4,sigmaMrv,sigmaMwv,sigmaMeonly,"MIT");
+            if (bdtoutput < 0.05) category = -1;
             phoid_mvaout_lead = l.photonIDMVA(diphoton_index.first,l.dipho_vtxind[diphoton_id],lead_p4,"MIT");
             phoid_mvaout_sublead = l.photonIDMVA(diphoton_index.second,l.dipho_vtxind[diphoton_id],sublead_p4,"MIT");
           }

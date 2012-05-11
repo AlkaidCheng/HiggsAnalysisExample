@@ -1887,14 +1887,16 @@ std::vector<double> RooContainer::significanceOptimizedBinning(TH1F *hs,TH1F *hb
 		return binEdges;
 	}
 
-	std::vector<double> binEdges_temp = optimizedReverseBinning(hb,nTargetBins,false,true);
-	std::vector<double> binEdges; 
+	std::vector<double> binEdges = optimizedReverseBinning(hb,nTargetBins,false,true);
+	//std::vector<double> binEdges_temp = optimizedReverseBinning(hb,nTargetBins,false,true);
+	//std::vector<double> binEdges; 
 
-	for (std::vector<double>::iterator it=binEdges_temp.begin();it!=binEdges_temp.end();it++){
-      if ( (*it<-1.0) || (*it>0.0) ){
-          binEdges.push_back(*it);
-      }
-  }
+	//for (std::vector<double>::iterator it=binEdges_temp.begin();it!=binEdges_temp.end();it++){
+  //    bool background_bin_edge = (*it>-1.0) && (*it<0.0);
+  //    if (!background_bin_edge){
+  //        binEdges.push_back(*it);
+  //    }
+  //}
 
 	// Just TESTING HERE so remove this line soon!
 //	nTargetBins = 150; // this gives us about 144 with the latest thing :)
@@ -1950,7 +1952,7 @@ std::vector<double> RooContainer::significanceOptimizedBinning(TH1F *hs,TH1F *hb
 	g_step = (int)TMath::Exp(TMath::Log(nNewBins/2)/2);
 	if (g_step < 1) g_step=1;
 		
-	for (int N=2;N<10;N++){				// Refuse to go beyond 7 Bins, will take forever
+	for (int N=2;N<7;N++){				// Refuse to go beyond 7 Bins, will take forever
 	  double maximumSignificance=0;
 	  counters = new int[N];
 	  chosen_counters = new int[N];

@@ -18,23 +18,25 @@ ROOT.gStyle.SetOptStat(0)
 
 #-------------------------------------------------------------------------
 # Configuration for the Plotter
-intlumi = str(4.7)
+intlumi = str(4.76)
 #EXPmasses = [110,115,120,125,130,135,140,150]       # Only used in Bayesian and PL method
 OBSmasses = numpy.arange(115,151,1.)
 EXPmasses = numpy.arange(115,151,1.)
+#OBSmasses = [x * 0.1 for x in range(1100,1505,5)]
+#EXPmasses = [x * 0.1 for x in range(1100,1505,5)]
 #OBSmasses = [110,115,120,125,130,135,140,150]
 theorySMScales = [5,10]  			# A list of the C x sigma to draw
 
-OFFSETLOW=2
-OFFSETHIGH=4
+OFFSETLOW=0
+OFFSETHIGH=0
 
 FILLSTYLE=1001
 SMFILLSTYLE=3244
 FILLCOLOR_95=ROOT.kGreen
 FILLCOLOR_68=ROOT.kYellow
 FILLCOLOR_T=ROOT.kAzure+7			# Theory lines color
-RANGEYABS=[0.0,0.6]
-RANGEYRAT=[0.0,6]
+RANGEYABS=[0.0,0.3]
+RANGEYRAT=[0.0,5.5]
 #-------------------------------------------------------------------------
 # UserInput
 parser=OptionParser()
@@ -43,6 +45,7 @@ parser.add_option("-s","--doSmooth",action="store_true")
 parser.add_option("-b","--bayes",dest="bayes")
 parser.add_option("-o","--outputLimits",dest="outputLimits")
 parser.add_option("-e","--expectedOnly",action="store_true")
+parser.add_option("-d","--directory",default="None")
 parser.add_option("","--pval",action="store_true")
 (options,args)=parser.parse_args()
 # ------------------------------------------------------------------------
@@ -58,14 +61,17 @@ print "doRatio: ", options.doRatio
 print "doSmooth: ", options.doSmooth
  
 Method = args[0]
-EXPName = Method+"/expected"+Method
-if Method == "Asymptotic":  EXPName = Method+"/higgsCombineTest."+Method  # everyhting contained here
+if options.directory=="None": InputDirectory=Method
+else: InputDirectory=options.directory
+
+EXPName = InputDirectory+"/expected"+Method
+if Method == "Asymptotic":  EXPName = InputDirectory+"/higgsCombineTest."+Method  # everyhting contained here
 if Method == "ProfileLikelihood" or Method=="Asymptotic":
-  OBSName = Method+"/higgsCombineTest."+Method
+  OBSName = InputDirectory+"/higgsCombineTest."+Method
 if Method == "Bayesian":
-  OBSName = Method+"/higgsCombineOBSERVED.MarkovChainMC"
+  OBSName = InputDirectory+"/higgsCombineOBSERVED.MarkovChainMC"
 if Method == "Frequentist":
-  OBSName = Method+"/higgsCombineOBSERVED.Frequentist"
+  OBSName = InputDirectory+"/higgsCombineOBSERVED.Frequentist"
 
 if Method == "Frequentist" or Method == "Asymptotic": EXPmasses = OBSmasses[:]
 
@@ -159,7 +165,7 @@ else:
 #-------------------------------------------------------------------------
 
 # Set-up the GRAPHS
-leg=ROOT.TLegend(0.46,0.56,0.79,0.89)
+leg=ROOT.TLegend(0.13,0.7,0.55,0.89)
 leg.SetFillColor(0)
 leg.SetBorderSize(0)
 
@@ -228,7 +234,7 @@ for i,mass,f in zip(range(len(EXPfiles)),EXPmasses,EXPfiles):
   if Method == "Frequentist":
 
       up95[0]   = FrequentistLimits(f.GetName().replace("0.500.root","0.975.root"))
-      dn95[0]   = FrequentistLimits(f.GetName().replace("0.500.root","0.027.root"))
+      dn95[0]   = FrequentistLimits(f.GetName().replace("0.500.root","0.025.root"))
       up68[0]   = FrequentistLimits(f.GetName().replace("0.500.root","0.840.root"))
       dn68[0]   = FrequentistLimits(f.GetName().replace("0.500.root","0.160.root"))
 
@@ -309,7 +315,7 @@ for i,mass in zip(range(len(OBSfiles)),OBSmasses):
 
     sm = 1.;
     if obs[i] ==-1: continue
-    if not options.doRatio: sm = GetBR(M)*GetXsection(M)
+    if not options.doRatio: sm = GetBR(mass)*GetXsection(mass)
     graphObs.SetPoint(i,float(mass),obs[i]*sm)
     graphObs.SetPointError(i,0,0,0,0)
 
@@ -457,20 +463,17 @@ if not options.doRatio:
   mytext.DrawLatex(max(OBSmasses)+0.3,th*SMEnd,"%d#times#sigma_{%s}"%(th,extraString))
 
 mytext.SetNDC()
-mytext.DrawLatex(0.18,0.8,"#splitline{CMS preliminary}{#sqrt{s} = 7 TeV L = %.2f fb^{-1}}"%float(intlumi))
+mytext.DrawLatex(0.6,0.82,"#splitline{CMS preliminary}{#sqrt{s} = 7 TeV L = %.2f fb^{-1}}"%float(intlumi))
 leg.Draw()
 
 #Make a bunch of extensions to the plots
-if options.doRatio:
- C.SaveAs("limit_%s_%s_ratio.pdf"%(args[1],Method))
- C.SaveAs("limit_%s_%s_ratio.gif"%(args[1],Method))
- C.SaveAs("limit_%s_%s_ratio.eps"%(args[1],Method))
- C.SaveAs("limit_%s_%s_ratio.ps"%(args[1],Method))
-else:
- C.SaveAs("limit_%s_%s.pdf"%(args[1],Method))
- C.SaveAs("limit_%s_%s.gif"%(args[1],Method))
- C.SaveAs("limit_%s_%s.eps"%(args[1],Method))
- C.SaveAs("limit_%s_%s.ps"%(args[1],Method))
+OutputName = "limit_"+args[1]+"_"+Method
+if options.doRatio: OutputName+="_Ratio"
+if options.doSmooth: OutputName+="_Smooth"
+C.SaveAs(OutputName+".pdf")
+C.SaveAs(OutputName+".gif")
+C.SaveAs(OutputName+".eps")
+C.SaveAs(OutputName+".ps")
 
 if options.outputLimits:
   print "Writing Limits To ROOT file"
